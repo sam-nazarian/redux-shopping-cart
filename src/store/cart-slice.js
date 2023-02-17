@@ -8,6 +8,10 @@ const cartSlice = createSlice({
   },
 
   reducers: {
+    /**
+     * @param {Object} action  {id, title, price} action is what the user sends
+     * {id, name, price, quantity, totalPrice} is what we send
+     */
     addItemToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
