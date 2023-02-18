@@ -17,7 +17,12 @@ export const fetchCartData = () => {
 
     try {
       const cartData = await fetchData();
-      dispatch(cartActions.replaceCart(cartData));
+      dispatch(
+        cartActions.replaceCart({
+          items: cartData.items || [], //items will never be undefined if no items in database
+          totalQuantity: cartData.totalQuantity,
+        })
+      );
     } catch (error) {
       // Error
       dispatch(uiActions.showNotification({ status: 'error', title: 'Error!', message: 'Fetching cart data failed!' }));
@@ -40,7 +45,7 @@ export const sendCartData = (cart) => {
 
     const sendRequest = async () => {
       // PUT stores data but unlike post it will override existing data, & won't be added to a list of data
-      const response = await fetch('https://advanced-redux-644d2-default-rtdb.firebaseio.com/cart.json', { method: 'PUT', body: JSON.stringify(cart) });
+      const response = await fetch('https://advanced-redux-644d2-default-rtdb.firebaseio.com/cart.json', { method: 'PUT', body: JSON.stringify({ items: cart.items, totalQuantity: cart.totalQuantity }) });
 
       if (!response.ok) {
         throw new Error('Sending cart data failed.');

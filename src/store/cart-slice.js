@@ -5,6 +5,7 @@ const cartSlice = createSlice({
   initialState: {
     items: [],
     totalQuantity: 0,
+    changed: false,
   },
 
   reducers: {
@@ -21,6 +22,8 @@ const cartSlice = createSlice({
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
       state.totalQuantity++;
+      state.changed = true; //only changed on our local app, to avoid bug when data is imported useEffect on app runs
+
       if (!existingItem) {
         // push mutates an existing arr
         state.items.push({
@@ -41,6 +44,7 @@ const cartSlice = createSlice({
       const id = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
       state.totalQuantity--;
+      state.changed = true;
 
       if (existingItem.quantity === 1) {
         //select items that don't have the id, should be removed (select everything that doesn't have id)

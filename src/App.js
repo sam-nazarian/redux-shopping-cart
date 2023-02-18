@@ -26,7 +26,11 @@ function App() {
       return;
     }
 
-    dispatch(sendCartData(cart));
+    // only sendCartData to database if the cart changed locally on the machine & not when it's loaded by the fetchCartData()
+    // which would cause this useEffect to run as it would cause the cart to change.
+    if (cart.changed) {
+      dispatch(sendCartData(cart));
+    }
   }, [cart, dispatch]);
 
   return (
